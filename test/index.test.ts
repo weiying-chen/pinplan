@@ -124,3 +124,29 @@ test("mirrors part and pin coordinates for bottom view", () => {
   assert.match(svg, /data-pin="LEFT" cx="220" cy="112"/);
   assert.match(svg, /data-pin="RIGHT" cx="172" cy="136"/);
 });
+
+test("connects pins on one-dimensional component footprints", () => {
+  const narrowPlan: Plan = {
+    board: { w: 5, h: 5 },
+    parts: [
+      {
+        id: "vertical",
+        name: "Vertical header",
+        at: { x: 2, y: 1 },
+        size: { w: 1, h: 4 },
+        pins: { A: { x: 1, y: 1 }, B: { x: 1, y: 4 } },
+      },
+      {
+        id: "horizontal",
+        name: "Horizontal header",
+        at: { x: 1, y: 5 },
+        size: { w: 3, h: 1 },
+        pins: { A: { x: 1, y: 1 }, B: { x: 3, y: 1 } },
+      },
+    ],
+  };
+
+  const svg = renderPlan(narrowPlan);
+  assert.match(svg, /<line class="part-outline" x1="100" y1="88" x2="100" y2="160"/);
+  assert.match(svg, /<line class="part-outline" x1="76" y1="184" x2="124" y2="184"/);
+});

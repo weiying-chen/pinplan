@@ -244,7 +244,13 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
     const partWidth = (part.size.w - 1) * spacing;
     const partHeight = (part.size.h - 1) * spacing;
     elements.push(`<g data-part="${escapeXml(part.id)}">`);
-    elements.push(`<rect x="${left}" y="${top}" width="${partWidth}" height="${partHeight}" fill="none" stroke="#d6bd63" stroke-width="2"/>`);
+    if (part.size.w === 1 && part.size.h > 1) {
+      elements.push(`<line class="part-outline" x1="${left}" y1="${top}" x2="${left}" y2="${top + partHeight}" stroke="#d6bd63" stroke-width="2"/>`);
+    } else if (part.size.h === 1 && part.size.w > 1) {
+      elements.push(`<line class="part-outline" x1="${left}" y1="${top}" x2="${left + partWidth}" y2="${top}" stroke="#d6bd63" stroke-width="2"/>`);
+    } else if (part.size.w > 1 && part.size.h > 1) {
+      elements.push(`<rect x="${left}" y="${top}" width="${partWidth}" height="${partHeight}" fill="none" stroke="#d6bd63" stroke-width="2"/>`);
+    }
     elements.push(`<text x="${left + partWidth / 2}" y="${top - 12}" class="part-name" text-anchor="middle">${escapeXml(part.name)}</text>`);
 
     for (const [name, pin] of Object.entries(part.pins)) {

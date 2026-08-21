@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { renderPlan, validatePlan, type Plan } from "../src/index.js";
+import { parseView, renderPlan, transformPlan, validatePlan, type Plan } from "../src/index.js";
 
 const plan: Plan = {
   board: { w: 5, h: 4 },
@@ -48,4 +48,31 @@ test("rejects parts and pins outside their bounds", () => {
   };
 
   assert.throws(() => validatePlan(invalid), /must fit inside the board/);
+});
+
+test("parses the view argument and defaults to top", () => {
+  assert.equal(parseView([]), "top");
+  assert.equal(parseView(["--view", "top"]), "top");
+  assert.equal(parseView(["--view", "bottom"]), "bottom");
+  assert.throws(() => parseView(["--view", "side"]), /top.*bottom/);
+});
+
+test("mirrors part and pin coordinates for bottom view", () => {
+  const asymmetricPlan: Plan = {
+    ...plan,
+    board: { w: 8, h: 4 },
+  };
+
+  const bottomPlan = transformPlan(asymmetricPlan, "bottom");
+  const part = bottomPlan.parts[0];
+  assert.ok(part);
+  assert.deepEqual(part.at, { x: 5, y: 2 });
+  assert.deepEqual(part.pins.LEFT, { x: 3, y: 1 });
+  assert.deepEqual(part.pins.RIGHT, { x: 1, y: 2 });
+
+  const svg = renderPlan(bottomPlan, "bottom");
+  assert.match(svg, /Pinplan - Bottom \/ Solder View/);
+  assert.match(svg, /Mirrored for solder-side wiring\./);
+  assert.match(svg, /data-pin="LEFT" cx="216" cy="96"/);
+  assert.match(svg, /data-pin="RIGHT" cx="168" cy="120"/);
 });

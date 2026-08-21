@@ -24,6 +24,8 @@ export type Plan = {
   parts: Part[];
 };
 
+export type View = "top" | "bottom";
+
 const spacing = 24;
 const margin = 72;
 
@@ -33,6 +35,21 @@ function isPositiveNumber(value: number): boolean {
 
 function isPositiveInteger(value: number): boolean {
   return Number.isInteger(value) && value > 0;
+}
+
+export function parseView(args: string[]): View {
+  if (args.length === 0) {
+    return "top";
+  }
+  if (args.length !== 2 || args[0] !== "--view") {
+    throw new Error('Usage: npm run draw -- --view <top|bottom>.');
+  }
+
+  const view = args[1];
+  if (view !== "top" && view !== "bottom") {
+    throw new Error(`Invalid --view value "${view}". Expected "top" or "bottom".`);
+  }
+  return view;
 }
 
 export function validatePlan(plan: Plan): void {
@@ -82,6 +99,34 @@ export function validatePlan(plan: Plan): void {
   }
 }
 
+export function transformPlan(plan: Plan, view: View): Plan {
+  validatePlan(plan);
+  if (view === "top") {
+    return plan;
+  }
+
+  return {
+    board: { ...plan.board },
+    parts: plan.parts.map((part) => {
+      const topRight = part.at.x + part.size.w - 1;
+      return {
+        ...part,
+        at: {
+          x: plan.board.w - topRight + 1,
+          y: part.at.y,
+        },
+        size: { ...part.size },
+        pins: Object.fromEntries(
+          Object.entries(part.pins).map(([name, pin]) => [
+            name,
+            { x: part.size.w - pin.x + 1, y: pin.y },
+          ]),
+        ),
+      };
+    }),
+  };
+}
+
 function escapeXml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -95,7 +140,7 @@ function boardPosition(coordinate: number): number {
   return margin + (coordinate - 1) * spacing;
 }
 
-export function renderPlan(plan: Plan): string {
+export function renderPlan(plan: Plan, view: View = "top"): string {
   validatePlan(plan);
 
   const width = margin * 2 + (plan.board.w - 1) * spacing;
@@ -103,9 +148,15 @@ export function renderPlan(plan: Plan): string {
   const elements: string[] = [];
 
   elements.push(`<rect width="100%" height="100%" fill="#181a1f"/>`);
+  const title = view === "top" ? "Pinplan - Top View" : "Pinplan - Bottom / Solder View";
+  elements.push(`<text x="${width / 2}" y="24" class="view-title" text-anchor="middle">${title}</text>`);
+  if (view === "bottom") {
+    elements.push(`<text x="${width / 2}" y="${height - 18}" class="view-note" text-anchor="middle">Mirrored for solder-side wiring.</text>`);
+  }
 
   for (let x = 1; x <= plan.board.w; x += 1) {
-    elements.push(`<text x="${boardPosition(x)}" y="${margin - 26}" class="coordinate" text-anchor="middle">${x}</text>`);
+    const label = view === "bottom" ? plan.board.w - x + 1 : x;
+    elements.push(`<text x="${boardPosition(x)}" y="${margin - 26}" class="coordinate" text-anchor="middle">${label}</text>`);
   }
   for (let y = 1; y <= plan.board.h; y += 1) {
     elements.push(`<text x="${margin - 26}" y="${boardPosition(y) + 4}" class="coordinate" text-anchor="end">${y}</text>`);
@@ -142,7 +193,7 @@ export function renderPlan(plan: Plan): string {
   return [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<style>text { font-family: system-ui, sans-serif; } .coordinate { font-size: 10px; fill: #9da3aa; } .part-name { font-size: 13px; font-weight: 600; fill: #fff; } .pin-label { font-size: 9px; fill: #fff; }</style>`,
+    `<style>text { font-family: system-ui, sans-serif; } .view-title { font-size: 16px; font-weight: 600; fill: #fff; } .view-note { font-size: 11px; fill: #9da3aa; } .coordinate { font-size: 10px; fill: #9da3aa; } .part-name { font-size: 13px; font-weight: 600; fill: #fff; } .pin-label { font-size: 9px; fill: #fff; }</style>`,
     ...elements,
     `</svg>`,
     "",
@@ -150,11 +201,13 @@ export function renderPlan(plan: Plan): string {
 }
 
 async function main(): Promise<void> {
+  const view = parseView(process.argv.slice(2));
   const planText = await readFile("plan.json", "utf8");
   const plan = JSON.parse(planText) as Plan;
-  const svg = renderPlan(plan);
+  const transformedPlan = transformPlan(plan, view);
+  const svg = renderPlan(transformedPlan, view);
   await writeFile("output.svg", svg, "utf8");
-  console.log("Generated output.svg");
+  console.log(`Generated output.svg (${view} view)`);
 }
 
 const entryPath = process.argv[1];

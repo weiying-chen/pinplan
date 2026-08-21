@@ -38,8 +38,9 @@ export type View = "top" | "bottom";
 const spacing = 24;
 const padding = 40;
 const titleHeight = 24;
-const columnLabelArea = 24;
-const rowLabelArea = 36;
+const columnLabelGutter = 24;
+const rowLabelGutter = 36;
+const bottomGutter = titleHeight + columnLabelGutter;
 const viewNoteHeight = 24;
 
 function isPositiveNumber(value: number): boolean {
@@ -210,10 +211,10 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
   const boardWidth = (plan.board.w - 1) * spacing;
   const boardHeight = (plan.board.h - 1) * spacing;
   const noteHeight = view === "bottom" ? viewNoteHeight : 0;
-  const boardLeft = padding + rowLabelArea;
-  const boardTop = padding + titleHeight + columnLabelArea;
-  const width = padding + rowLabelArea + boardWidth + padding;
-  const height = padding + titleHeight + columnLabelArea + boardHeight + noteHeight + padding;
+  const boardLeft = padding + rowLabelGutter;
+  const boardTop = padding + titleHeight + columnLabelGutter;
+  const width = padding + rowLabelGutter + boardWidth + rowLabelGutter + padding;
+  const height = padding + titleHeight + columnLabelGutter + boardHeight + bottomGutter + noteHeight + padding;
   const boardCenterX = boardLeft + boardWidth / 2;
   const elements: string[] = [];
 

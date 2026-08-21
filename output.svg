@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="812" height="824" viewBox="0 0 812 824">
+<svg xmlns="http://www.w3.org/2000/svg" width="848" height="872" viewBox="0 0 848 872">
 <style>text { font-family: system-ui, sans-serif; } .view-title { font-size: 16px; font-weight: 600; fill: #fff; } .view-note { font-size: 11px; fill: #9da3aa; } .coordinate { font-size: 10px; fill: #9da3aa; } .part-name { font-size: 13px; font-weight: 600; fill: #fff; } .pin-label { font-size: 9px; fill: #fff; }</style>
 <rect width="100%" height="100%" fill="#181a1f"/>
 <text x="424" y="56" class="view-title" text-anchor="middle">Pinplan - Top View</text>

@@ -36,7 +36,10 @@ export type RawPlan = {
 export type View = "top" | "bottom";
 
 const spacing = 24;
-const padding = 72;
+const padding = 40;
+const rowLabelGutter = 36;
+const titleHeight = 28;
+const columnLabelGutter = 24;
 const viewNoteHeight = 24;
 
 function isPositiveNumber(value: number): boolean {
@@ -207,16 +210,16 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
   const boardWidth = (plan.board.w - 1) * spacing;
   const boardHeight = (plan.board.h - 1) * spacing;
   const noteHeight = view === "bottom" ? viewNoteHeight : 0;
-  const boardLeft = padding;
-  const boardTop = padding;
-  const width = padding + boardWidth + padding;
-  const height = padding + boardHeight + padding + noteHeight;
+  const boardLeft = padding + rowLabelGutter;
+  const boardTop = padding + titleHeight + columnLabelGutter;
+  const width = padding + rowLabelGutter + boardWidth + padding;
+  const height = padding + titleHeight + columnLabelGutter + boardHeight + padding + noteHeight;
   const boardCenterX = boardLeft + boardWidth / 2;
   const elements: string[] = [];
 
   elements.push(`<rect width="100%" height="100%" fill="#181a1f"/>`);
   const title = view === "top" ? "Pinplan - Top View" : "Pinplan - Bottom / Solder View";
-  elements.push(`<text x="${boardCenterX}" y="24" class="view-title" text-anchor="middle">${title}</text>`);
+  elements.push(`<text x="${boardCenterX}" y="${padding + 16}" class="view-title" text-anchor="middle">${title}</text>`);
   if (view === "bottom") {
     elements.push(`<text x="${boardCenterX}" y="${height - 18}" class="view-note" text-anchor="middle">Mirrored for solder-side wiring.</text>`);
   }

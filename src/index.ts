@@ -37,6 +37,7 @@ export type View = "top" | "bottom";
 
 const spacing = 24;
 const margin = 72;
+const trailingMargin = 36;
 
 function isPositiveNumber(value: number): boolean {
   return Number.isFinite(value) && value > 0;
@@ -203,15 +204,18 @@ function boardPosition(coordinate: number): number {
 export function renderPlan(plan: Plan, view: View = "top"): string {
   validatePlan(plan);
 
-  const width = margin * 2 + (plan.board.w - 1) * spacing;
-  const height = margin * 2 + (plan.board.h - 1) * spacing;
+  const boardWidth = (plan.board.w - 1) * spacing;
+  const boardHeight = (plan.board.h - 1) * spacing;
+  const width = margin + boardWidth + trailingMargin;
+  const height = margin + boardHeight + trailingMargin;
+  const boardCenterX = margin + boardWidth / 2;
   const elements: string[] = [];
 
   elements.push(`<rect width="100%" height="100%" fill="#181a1f"/>`);
   const title = view === "top" ? "Pinplan - Top View" : "Pinplan - Bottom / Solder View";
-  elements.push(`<text x="${width / 2}" y="24" class="view-title" text-anchor="middle">${title}</text>`);
+  elements.push(`<text x="${boardCenterX}" y="24" class="view-title" text-anchor="middle">${title}</text>`);
   if (view === "bottom") {
-    elements.push(`<text x="${width / 2}" y="${height - 18}" class="view-note" text-anchor="middle">Mirrored for solder-side wiring.</text>`);
+    elements.push(`<text x="${boardCenterX}" y="${height - 18}" class="view-note" text-anchor="middle">Mirrored for solder-side wiring.</text>`);
   }
 
   for (let x = 1; x <= plan.board.w; x += 1) {

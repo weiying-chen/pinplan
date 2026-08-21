@@ -33,7 +33,7 @@ test("validates and renders a plan using one-based coordinates", () => {
   assert.doesNotThrow(() => validatePlan(plan));
 
   const svg = renderPlan(plan);
-  assert.match(svg, /<svg/);
+  assert.match(svg, /<svg[^>]+width="204" height="180"/);
   assert.match(svg, /Example &lt;part&gt;/);
   assert.match(svg, /data-pin="LEFT" cx="96" cy="96"/);
   assert.match(svg, /data-pin="RIGHT" cx="144" cy="120"/);

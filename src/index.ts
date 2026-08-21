@@ -102,6 +102,8 @@ export function renderPlan(plan: Plan): string {
   const height = margin * 2 + (plan.board.h - 1) * spacing;
   const elements: string[] = [];
 
+  elements.push(`<rect width="100%" height="100%" fill="#181a1f"/>`);
+
   for (let x = 1; x <= plan.board.w; x += 1) {
     elements.push(`<text x="${boardPosition(x)}" y="${margin - 26}" class="coordinate" text-anchor="middle">${x}</text>`);
   }
@@ -110,7 +112,7 @@ export function renderPlan(plan: Plan): string {
   }
   for (let y = 1; y <= plan.board.h; y += 1) {
     for (let x = 1; x <= plan.board.w; x += 1) {
-      elements.push(`<circle cx="${boardPosition(x)}" cy="${boardPosition(y)}" r="2.25" fill="#c7cdd3"/>`);
+      elements.push(`<circle class="board-hole" cx="${boardPosition(x)}" cy="${boardPosition(y)}" r="2.25" fill="#484d55"/>`);
     }
   }
 
@@ -120,7 +122,7 @@ export function renderPlan(plan: Plan): string {
     const partWidth = (part.size.w - 1) * spacing;
     const partHeight = (part.size.h - 1) * spacing;
     elements.push(`<g data-part="${escapeXml(part.id)}">`);
-    elements.push(`<rect x="${left}" y="${top}" width="${partWidth}" height="${partHeight}" fill="none" stroke="#31546f" stroke-width="2"/>`);
+    elements.push(`<rect x="${left}" y="${top}" width="${partWidth}" height="${partHeight}" fill="none" stroke="#8ab4d0" stroke-width="2"/>`);
     elements.push(`<text x="${left + partWidth / 2}" y="${top - 12}" class="part-name" text-anchor="middle">${escapeXml(part.name)}</text>`);
 
     for (const [name, pin] of Object.entries(part.pins)) {
@@ -131,7 +133,7 @@ export function renderPlan(plan: Plan): string {
       const onLeft = pin.x === 1;
       const labelX = cx + (onLeft ? -9 : 9);
       const anchor = onLeft ? "end" : "start";
-      elements.push(`<circle data-pin="${escapeXml(name)}" cx="${cx}" cy="${cy}" r="5" fill="#34495e" stroke="#fff" stroke-width="1.5"/>`);
+      elements.push(`<circle data-pin="${escapeXml(name)}" cx="${cx}" cy="${cy}" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>`);
       elements.push(`<text x="${labelX}" y="${cy + 4}" class="pin-label" text-anchor="${anchor}">${escapeXml(name)}</text>`);
     }
     elements.push("</g>");
@@ -140,7 +142,7 @@ export function renderPlan(plan: Plan): string {
   return [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<style>text { font-family: system-ui, sans-serif; fill: #263238; } .coordinate { font-size: 10px; fill: #6f7b83; } .part-name { font-size: 13px; font-weight: 600; } .pin-label { font-size: 9px; }</style>`,
+    `<style>text { font-family: system-ui, sans-serif; } .coordinate { font-size: 10px; fill: #9da3aa; } .part-name { font-size: 13px; font-weight: 600; fill: #fff; } .pin-label { font-size: 9px; fill: #fff; }</style>`,
     ...elements,
     `</svg>`,
     "",

@@ -27,7 +27,10 @@ test("validates and renders a plan using one-based coordinates", () => {
   assert.match(svg, /Example &lt;part&gt;/);
   assert.match(svg, /data-pin="LEFT" cx="96" cy="96"/);
   assert.match(svg, /data-pin="RIGHT" cx="144" cy="120"/);
-  assert.doesNotMatch(svg, /rx="6"|fill="#fafafa"|stroke="#d5d9de"/);
+  assert.match(svg, /<rect width="100%" height="100%" fill="#181a1f"\/>/);
+  assert.match(svg, /class="board-hole"[^>]+fill="#484d55"/);
+  assert.match(svg, /\.part-name[^}]+fill: #fff/);
+  assert.doesNotMatch(svg, /rx=|stroke="#d5d9de"/);
 });
 
 test("rejects parts and pins outside their bounds", () => {

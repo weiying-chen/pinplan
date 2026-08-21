@@ -33,14 +33,14 @@ test("validates and renders a plan using one-based coordinates", () => {
   assert.doesNotThrow(() => validatePlan(plan));
 
   const svg = renderPlan(plan);
-  assert.match(svg, /<svg[^>]+width="204" height="180"/);
+  assert.match(svg, /<svg[^>]+width="212" height="200" viewBox="0 0 212 200"/);
   assert.match(svg, /Example &lt;part&gt;/);
-  assert.match(svg, /data-pin="LEFT" cx="96" cy="96"/);
-  assert.match(svg, /data-pin="RIGHT" cx="144" cy="120"/);
+  assert.match(svg, /data-pin="LEFT" cx="100" cy="112"/);
+  assert.match(svg, /data-pin="RIGHT" cx="148" cy="136"/);
   assert.match(svg, /<rect width="100%" height="100%" fill="#181a1f"\/>/);
   assert.match(svg, /class="board-hole"[^>]+fill="#484d55"/);
   assert.match(svg, /\.part-name[^}]+fill: #fff/);
-  assert.match(svg, /<rect x="96" y="96"[^>]+stroke="#d6bd63"/);
+  assert.match(svg, /<rect x="100" y="112"[^>]+stroke="#d6bd63"/);
   assert.match(svg, /data-pin="LEFT"[^>]+fill="#d6bd63"\/>/);
   assert.doesNotMatch(svg, /data-pin="LEFT"[^>]+stroke=/);
   assert.doesNotMatch(svg, /rx=|stroke="#d5d9de"/);
@@ -121,6 +121,6 @@ test("mirrors part and pin coordinates for bottom view", () => {
   const svg = renderPlan(bottomPlan, "bottom");
   assert.match(svg, /Pinplan - Bottom \/ Solder View/);
   assert.match(svg, /Mirrored for solder-side wiring\./);
-  assert.match(svg, /data-pin="LEFT" cx="216" cy="96"/);
-  assert.match(svg, /data-pin="RIGHT" cx="168" cy="120"/);
+  assert.match(svg, /data-pin="LEFT" cx="220" cy="112"/);
+  assert.match(svg, /data-pin="RIGHT" cx="172" cy="136"/);
 });

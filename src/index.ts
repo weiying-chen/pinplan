@@ -36,8 +36,11 @@ export type RawPlan = {
 export type View = "top" | "bottom";
 
 const spacing = 24;
-const margin = 72;
-const trailingMargin = 36;
+const padding = 40;
+const titleHeight = 24;
+const columnLabelArea = 24;
+const rowLabelArea = 36;
+const viewNoteHeight = 24;
 
 function isPositiveNumber(value: number): boolean {
   return Number.isFinite(value) && value > 0;
@@ -197,8 +200,8 @@ function escapeXml(value: string): string {
     .replaceAll("'", "&apos;");
 }
 
-function boardPosition(coordinate: number): number {
-  return margin + (coordinate - 1) * spacing;
+function gridPosition(origin: number, coordinate: number): number {
+  return origin + (coordinate - 1) * spacing;
 }
 
 export function renderPlan(plan: Plan, view: View = "top"): string {
@@ -206,35 +209,38 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
 
   const boardWidth = (plan.board.w - 1) * spacing;
   const boardHeight = (plan.board.h - 1) * spacing;
-  const width = margin + boardWidth + trailingMargin;
-  const height = margin + boardHeight + trailingMargin;
-  const boardCenterX = margin + boardWidth / 2;
+  const noteHeight = view === "bottom" ? viewNoteHeight : 0;
+  const boardLeft = padding + rowLabelArea;
+  const boardTop = padding + titleHeight + columnLabelArea;
+  const width = padding + rowLabelArea + boardWidth + padding;
+  const height = padding + titleHeight + columnLabelArea + boardHeight + noteHeight + padding;
+  const boardCenterX = boardLeft + boardWidth / 2;
   const elements: string[] = [];
 
   elements.push(`<rect width="100%" height="100%" fill="#181a1f"/>`);
   const title = view === "top" ? "Pinplan - Top View" : "Pinplan - Bottom / Solder View";
-  elements.push(`<text x="${boardCenterX}" y="24" class="view-title" text-anchor="middle">${title}</text>`);
+  elements.push(`<text x="${boardCenterX}" y="${padding + 16}" class="view-title" text-anchor="middle">${title}</text>`);
   if (view === "bottom") {
-    elements.push(`<text x="${boardCenterX}" y="${height - 18}" class="view-note" text-anchor="middle">Mirrored for solder-side wiring.</text>`);
+    elements.push(`<text x="${boardCenterX}" y="${boardTop + boardHeight + 18}" class="view-note" text-anchor="middle">Mirrored for solder-side wiring.</text>`);
   }
 
   for (let x = 1; x <= plan.board.w; x += 1) {
     const boardX = view === "bottom" ? plan.board.w - x + 1 : x;
     const columnLabel = coordLabel(boardX, 1).slice(0, -1);
-    elements.push(`<text x="${boardPosition(x)}" y="${margin - 26}" class="coordinate" text-anchor="middle">${columnLabel}</text>`);
+    elements.push(`<text x="${gridPosition(boardLeft, x)}" y="${boardTop - 12}" class="coordinate" text-anchor="middle">${columnLabel}</text>`);
   }
   for (let y = 1; y <= plan.board.h; y += 1) {
-    elements.push(`<text x="${margin - 26}" y="${boardPosition(y) + 4}" class="coordinate" text-anchor="end">${y}</text>`);
+    elements.push(`<text x="${boardLeft - 14}" y="${gridPosition(boardTop, y) + 4}" class="coordinate" text-anchor="end">${y}</text>`);
   }
   for (let y = 1; y <= plan.board.h; y += 1) {
     for (let x = 1; x <= plan.board.w; x += 1) {
-      elements.push(`<circle class="board-hole" cx="${boardPosition(x)}" cy="${boardPosition(y)}" r="2.25" fill="#484d55"/>`);
+      elements.push(`<circle class="board-hole" cx="${gridPosition(boardLeft, x)}" cy="${gridPosition(boardTop, y)}" r="2.25" fill="#484d55"/>`);
     }
   }
 
   for (const part of plan.parts) {
-    const left = boardPosition(part.at.x);
-    const top = boardPosition(part.at.y);
+    const left = gridPosition(boardLeft, part.at.x);
+    const top = gridPosition(boardTop, part.at.y);
     const partWidth = (part.size.w - 1) * spacing;
     const partHeight = (part.size.h - 1) * spacing;
     elements.push(`<g data-part="${escapeXml(part.id)}">`);
@@ -244,8 +250,8 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
     for (const [name, pin] of Object.entries(part.pins)) {
       const actualX = part.at.x + pin.x - 1;
       const actualY = part.at.y + pin.y - 1;
-      const cx = boardPosition(actualX);
-      const cy = boardPosition(actualY);
+      const cx = gridPosition(boardLeft, actualX);
+      const cy = gridPosition(boardTop, actualY);
       const onLeft = pin.x === 1;
       const labelX = cx + (onLeft ? -9 : 9);
       const anchor = onLeft ? "end" : "start";

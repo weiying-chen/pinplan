@@ -33,14 +33,20 @@ test("validates and renders a plan using one-based coordinates", () => {
   assert.doesNotThrow(() => validatePlan(plan));
 
   const svg = renderPlan(plan);
-  assert.match(svg, /<svg[^>]+width="212" height="204" viewBox="0 0 212 204"/);
+  const svgBox = svg.match(/<svg[^>]+width="([^"]+)" height="([^"]+)" viewBox="([^"]+) ([^"]+) ([^"]+) ([^"]+)"/);
+  const backgroundBox = svg.match(/<rect class="background" x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)"/);
+  assert.ok(svgBox);
+  assert.ok(backgroundBox);
+  assert.deepEqual(backgroundBox.slice(1), [svgBox[3], svgBox[4], svgBox[5], svgBox[6]]);
+  assert.equal(svgBox[1], svgBox[5]);
+  assert.equal(svgBox[2], svgBox[6]);
   assert.match(svg, /Example &lt;part&gt;/);
-  assert.match(svg, /data-pin="LEFT" cx="100" cy="116"/);
-  assert.match(svg, /data-pin="RIGHT" cx="148" cy="140"/);
-  assert.match(svg, /<rect width="100%" height="100%" fill="#181a1f"\/>/);
+  assert.match(svg, /data-pin="LEFT" cx="24" cy="24"/);
+  assert.match(svg, /data-pin="RIGHT" cx="72" cy="48"/);
+  assert.match(svg, /class="background"[^>]+fill="#181a1f"/);
   assert.match(svg, /class="board-hole"[^>]+fill="#484d55"/);
   assert.match(svg, /\.part-name[^}]+fill: #fff/);
-  assert.match(svg, /<rect x="100" y="116"[^>]+stroke="#d6bd63"/);
+  assert.match(svg, /<rect x="24" y="24"[^>]+stroke="#d6bd63"/);
   assert.match(svg, /data-pin="LEFT"[^>]+fill="#d6bd63"\/>/);
   assert.doesNotMatch(svg, /data-pin="LEFT"[^>]+stroke=/);
   assert.doesNotMatch(svg, /rx=|stroke="#d5d9de"/);
@@ -121,8 +127,8 @@ test("mirrors part and pin coordinates for bottom view", () => {
   const svg = renderPlan(bottomPlan, "bottom");
   assert.match(svg, /Pinplan - Bottom \/ Solder View/);
   assert.match(svg, /Mirrored for solder-side wiring\./);
-  assert.match(svg, /data-pin="LEFT" cx="220" cy="116"/);
-  assert.match(svg, /data-pin="RIGHT" cx="172" cy="140"/);
+  assert.match(svg, /data-pin="LEFT" cx="144" cy="24"/);
+  assert.match(svg, /data-pin="RIGHT" cx="96" cy="48"/);
 });
 
 test("connects pins on one-dimensional component footprints", () => {
@@ -147,6 +153,6 @@ test("connects pins on one-dimensional component footprints", () => {
   };
 
   const svg = renderPlan(narrowPlan);
-  assert.match(svg, /<line class="part-outline" x1="100" y1="92" x2="100" y2="164"/);
-  assert.match(svg, /<line class="part-outline" x1="76" y1="188" x2="124" y2="188"/);
+  assert.match(svg, /<line class="part-outline" x1="24" y1="0" x2="24" y2="72"/);
+  assert.match(svg, /<line class="part-outline" x1="0" y1="96" x2="48" y2="96"/);
 });

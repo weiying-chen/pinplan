@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { parseView, renderPlan, transformPlan, validatePlan, type Plan } from "../src/index.js";
+import { coordLabel, parseView, renderPlan, transformPlan, validatePlan, type Plan } from "../src/index.js";
 
 const plan: Plan = {
   board: { w: 5, h: 4 },
@@ -58,6 +58,14 @@ test("parses the view argument and defaults to top", () => {
   assert.equal(parseView(["--view", "top"]), "top");
   assert.equal(parseView(["--view", "bottom"]), "bottom");
   assert.throws(() => parseView(["--view", "side"]), /top.*bottom/);
+});
+
+test("formats numeric coordinates like spreadsheet cells", () => {
+  assert.equal(coordLabel(1, 1), "A1");
+  assert.equal(coordLabel(2, 1), "B1");
+  assert.equal(coordLabel(26, 1), "Z1");
+  assert.equal(coordLabel(27, 1), "AA1");
+  assert.equal(coordLabel(30, 30), "AD30");
 });
 
 test("mirrors part and pin coordinates for bottom view", () => {

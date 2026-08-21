@@ -37,6 +37,21 @@ function isPositiveInteger(value: number): boolean {
   return Number.isInteger(value) && value > 0;
 }
 
+export function coordLabel(x: number, y: number): string {
+  if (!isPositiveInteger(x) || !isPositiveInteger(y)) {
+    throw new Error("Coordinates must be positive whole numbers.");
+  }
+
+  let column = "";
+  let remaining = x;
+  while (remaining > 0) {
+    remaining -= 1;
+    column = String.fromCharCode(65 + (remaining % 26)) + column;
+    remaining = Math.floor(remaining / 26);
+  }
+  return `${column}${y}`;
+}
+
 export function parseView(args: string[]): View {
   if (args.length === 0) {
     return "top";
@@ -155,8 +170,9 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
   }
 
   for (let x = 1; x <= plan.board.w; x += 1) {
-    const label = view === "bottom" ? plan.board.w - x + 1 : x;
-    elements.push(`<text x="${boardPosition(x)}" y="${margin - 26}" class="coordinate" text-anchor="middle">${label}</text>`);
+    const boardX = view === "bottom" ? plan.board.w - x + 1 : x;
+    const columnLabel = coordLabel(boardX, 1).slice(0, -1);
+    elements.push(`<text x="${boardPosition(x)}" y="${margin - 26}" class="coordinate" text-anchor="middle">${columnLabel}</text>`);
   }
   for (let y = 1; y <= plan.board.h; y += 1) {
     elements.push(`<text x="${margin - 26}" y="${boardPosition(y) + 4}" class="coordinate" text-anchor="end">${y}</text>`);

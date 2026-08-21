@@ -999,4 +999,16 @@
 <circle data-pin="GPIO0" cx="480" cy="408" r="5" fill="#d6bd63"/>
 <text x="489" y="412" class="pin-label" text-anchor="start">GPIO0</text>
 </g>
+<g data-part="oled">
+<rect x="576" y="240" width="0" height="72" fill="none" stroke="#d6bd63" stroke-width="2"/>
+<text x="576" y="228" class="part-name" text-anchor="middle">0.91 OLED</text>
+<circle data-pin="SDA" cx="576" cy="240" r="5" fill="#d6bd63"/>
+<text x="567" y="244" class="pin-label" text-anchor="end">SDA</text>
+<circle data-pin="SCL" cx="576" cy="264" r="5" fill="#d6bd63"/>
+<text x="567" y="268" class="pin-label" text-anchor="end">SCL</text>
+<circle data-pin="VCC" cx="576" cy="288" r="5" fill="#d6bd63"/>
+<text x="567" y="292" class="pin-label" text-anchor="end">VCC</text>
+<circle data-pin="GND" cx="576" cy="312" r="5" fill="#d6bd63"/>
+<text x="567" y="316" class="pin-label" text-anchor="end">GND</text>
+</g>
 </svg>

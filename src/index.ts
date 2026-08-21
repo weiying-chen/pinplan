@@ -173,7 +173,7 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
     const partWidth = (part.size.w - 1) * spacing;
     const partHeight = (part.size.h - 1) * spacing;
     elements.push(`<g data-part="${escapeXml(part.id)}">`);
-    elements.push(`<rect x="${left}" y="${top}" width="${partWidth}" height="${partHeight}" fill="none" stroke="#8ab4d0" stroke-width="2"/>`);
+    elements.push(`<rect x="${left}" y="${top}" width="${partWidth}" height="${partHeight}" fill="none" stroke="#d6bd63" stroke-width="2"/>`);
     elements.push(`<text x="${left + partWidth / 2}" y="${top - 12}" class="part-name" text-anchor="middle">${escapeXml(part.name)}</text>`);
 
     for (const [name, pin] of Object.entries(part.pins)) {
@@ -184,7 +184,7 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
       const onLeft = pin.x === 1;
       const labelX = cx + (onLeft ? -9 : 9);
       const anchor = onLeft ? "end" : "start";
-      elements.push(`<circle data-pin="${escapeXml(name)}" cx="${cx}" cy="${cy}" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>`);
+      elements.push(`<circle data-pin="${escapeXml(name)}" cx="${cx}" cy="${cy}" r="5" fill="#d6bd63"/>`);
       elements.push(`<text x="${labelX}" y="${cy + 4}" class="pin-label" text-anchor="${anchor}">${escapeXml(name)}</text>`);
     }
     elements.push("</g>");

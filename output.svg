@@ -965,39 +965,39 @@
 <circle class="board-hole" cx="744" cy="768" r="2.25" fill="#484d55"/>
 <circle class="board-hole" cx="768" cy="768" r="2.25" fill="#484d55"/>
 <g data-part="esp32">
-<rect x="360" y="240" width="144" height="168" fill="none" stroke="#8ab4d0" stroke-width="2"/>
+<rect x="360" y="240" width="144" height="168" fill="none" stroke="#d6bd63" stroke-width="2"/>
 <text x="432" y="228" class="part-name" text-anchor="middle">ESP32-C3 SuperMini</text>
-<circle data-pin="GPIO5" cx="504" cy="240" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO5" cx="504" cy="240" r="5" fill="#d6bd63"/>
 <text x="513" y="244" class="pin-label" text-anchor="start">GPIO5</text>
-<circle data-pin="GPIO6" cx="504" cy="264" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO6" cx="504" cy="264" r="5" fill="#d6bd63"/>
 <text x="513" y="268" class="pin-label" text-anchor="start">GPIO6</text>
-<circle data-pin="GPIO7" cx="504" cy="288" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO7" cx="504" cy="288" r="5" fill="#d6bd63"/>
 <text x="513" y="292" class="pin-label" text-anchor="start">GPIO7</text>
-<circle data-pin="GPIO8" cx="504" cy="312" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO8" cx="504" cy="312" r="5" fill="#d6bd63"/>
 <text x="513" y="316" class="pin-label" text-anchor="start">GPIO8</text>
-<circle data-pin="GPIO9" cx="504" cy="336" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO9" cx="504" cy="336" r="5" fill="#d6bd63"/>
 <text x="513" y="340" class="pin-label" text-anchor="start">GPIO9</text>
-<circle data-pin="GPIO10" cx="504" cy="360" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO10" cx="504" cy="360" r="5" fill="#d6bd63"/>
 <text x="513" y="364" class="pin-label" text-anchor="start">GPIO10</text>
-<circle data-pin="GPIO20" cx="504" cy="384" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO20" cx="504" cy="384" r="5" fill="#d6bd63"/>
 <text x="513" y="388" class="pin-label" text-anchor="start">GPIO20</text>
-<circle data-pin="GPIO21" cx="504" cy="408" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO21" cx="504" cy="408" r="5" fill="#d6bd63"/>
 <text x="513" y="412" class="pin-label" text-anchor="start">GPIO21</text>
-<circle data-pin="5V" cx="360" cy="240" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="5V" cx="360" cy="240" r="5" fill="#d6bd63"/>
 <text x="351" y="244" class="pin-label" text-anchor="end">5V</text>
-<circle data-pin="GND" cx="360" cy="264" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GND" cx="360" cy="264" r="5" fill="#d6bd63"/>
 <text x="351" y="268" class="pin-label" text-anchor="end">GND</text>
-<circle data-pin="3V3" cx="360" cy="288" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="3V3" cx="360" cy="288" r="5" fill="#d6bd63"/>
 <text x="351" y="292" class="pin-label" text-anchor="end">3V3</text>
-<circle data-pin="GPIO4" cx="360" cy="312" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO4" cx="360" cy="312" r="5" fill="#d6bd63"/>
 <text x="351" y="316" class="pin-label" text-anchor="end">GPIO4</text>
-<circle data-pin="GPIO3" cx="360" cy="336" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO3" cx="360" cy="336" r="5" fill="#d6bd63"/>
 <text x="351" y="340" class="pin-label" text-anchor="end">GPIO3</text>
-<circle data-pin="GPIO2" cx="360" cy="360" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO2" cx="360" cy="360" r="5" fill="#d6bd63"/>
 <text x="351" y="364" class="pin-label" text-anchor="end">GPIO2</text>
-<circle data-pin="GPIO1" cx="360" cy="384" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO1" cx="360" cy="384" r="5" fill="#d6bd63"/>
 <text x="351" y="388" class="pin-label" text-anchor="end">GPIO1</text>
-<circle data-pin="GPIO0" cx="360" cy="408" r="5" fill="#252a30" stroke="#d8e7f0" stroke-width="1.5"/>
+<circle data-pin="GPIO0" cx="360" cy="408" r="5" fill="#d6bd63"/>
 <text x="351" y="412" class="pin-label" text-anchor="end">GPIO0</text>
 </g>
 </svg>

@@ -30,6 +30,9 @@ test("validates and renders a plan using one-based coordinates", () => {
   assert.match(svg, /<rect width="100%" height="100%" fill="#181a1f"\/>/);
   assert.match(svg, /class="board-hole"[^>]+fill="#484d55"/);
   assert.match(svg, /\.part-name[^}]+fill: #fff/);
+  assert.match(svg, /<rect x="96" y="96"[^>]+stroke="#d6bd63"/);
+  assert.match(svg, /data-pin="LEFT"[^>]+fill="#d6bd63"\/>/);
+  assert.doesNotMatch(svg, /data-pin="LEFT"[^>]+stroke=/);
   assert.doesNotMatch(svg, /rx=|stroke="#d5d9de"/);
 });
 

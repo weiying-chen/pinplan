@@ -4,7 +4,7 @@
     {
       "id": "esp32",
       "name": "ESP32-C3 SuperMini",
-      "at": { "x": 12, "y": 8 },
+      "at": "L8",
       "size": { "w": 7, "h": 8 },
       "pins": {
         "GPIO5": { "x": 1, "y": 1 },

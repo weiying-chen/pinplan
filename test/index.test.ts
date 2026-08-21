@@ -1,7 +1,17 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { coordLabel, parseView, renderPlan, transformPlan, validatePlan, type Plan } from "../src/index.js";
+import {
+  coordLabel,
+  normalizePlan,
+  parseCoordLabel,
+  parseView,
+  renderPlan,
+  transformPlan,
+  validatePlan,
+  type Plan,
+  type RawPlan,
+} from "../src/index.js";
 
 const plan: Plan = {
   board: { w: 5, h: 4 },
@@ -66,6 +76,33 @@ test("formats numeric coordinates like spreadsheet cells", () => {
   assert.equal(coordLabel(26, 1), "Z1");
   assert.equal(coordLabel(27, 1), "AA1");
   assert.equal(coordLabel(30, 30), "AD30");
+});
+
+test("parses spreadsheet coordinate labels", () => {
+  assert.deepEqual(parseCoordLabel("A1"), { x: 1, y: 1 });
+  assert.deepEqual(parseCoordLabel("B1"), { x: 2, y: 1 });
+  assert.deepEqual(parseCoordLabel("Z1"), { x: 26, y: 1 });
+  assert.deepEqual(parseCoordLabel("AA1"), { x: 27, y: 1 });
+  assert.deepEqual(parseCoordLabel("L8"), { x: 12, y: 8 });
+  assert.deepEqual(parseCoordLabel("AD30"), { x: 30, y: 30 });
+});
+
+test("rejects invalid spreadsheet coordinate labels", () => {
+  for (const label of ["", "12L", "A0", "A-1", "AA", "1A"]) {
+    assert.throws(() => parseCoordLabel(label), /Invalid coordinate label/);
+  }
+});
+
+test("normalizes numeric and string part placements", () => {
+  const numeric = normalizePlan(plan);
+  assert.deepEqual(numeric.parts[0]?.at, { x: 2, y: 2 });
+
+  const raw: RawPlan = {
+    ...plan,
+    parts: [{ ...plan.parts[0]!, at: "L8" }],
+  };
+  const normalized = normalizePlan(raw);
+  assert.deepEqual(normalized.parts[0]?.at, { x: 12, y: 8 });
 });
 
 test("mirrors part and pin coordinates for bottom view", () => {

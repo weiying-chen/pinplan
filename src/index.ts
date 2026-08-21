@@ -24,6 +24,15 @@ export type Plan = {
   parts: Part[];
 };
 
+export type RawPart = Omit<Part, "at"> & {
+  at: Part["at"] | string;
+};
+
+export type RawPlan = {
+  board: Board;
+  parts: RawPart[];
+};
+
 export type View = "top" | "bottom";
 
 const spacing = 24;
@@ -50,6 +59,42 @@ export function coordLabel(x: number, y: number): string {
     remaining = Math.floor(remaining / 26);
   }
   return `${column}${y}`;
+}
+
+export function parseCoordLabel(label: string): { x: number; y: number } {
+  const match = /^([A-Z]+)([1-9]\d*)$/.exec(label);
+  if (!match) {
+    throw new Error(`Invalid coordinate label "${label}". Expected a label such as A1 or AD30.`);
+  }
+
+  const letters = match[1]!;
+  let x = 0;
+  for (const letter of letters) {
+    x = x * 26 + letter.charCodeAt(0) - 64;
+  }
+  const y = Number(match[2]);
+  if (!Number.isSafeInteger(x) || !Number.isSafeInteger(y)) {
+    throw new Error(`Invalid coordinate label "${label}". Coordinate is too large.`);
+  }
+  return { x, y };
+}
+
+export function normalizePlan(rawPlan: RawPlan): Plan {
+  if (!rawPlan || !rawPlan.board || !Array.isArray(rawPlan.parts)) {
+    throw new Error("Plan must contain a board and a parts array.");
+  }
+
+  return {
+    board: { ...rawPlan.board },
+    parts: rawPlan.parts.map((part) => ({
+      ...part,
+      at: typeof part.at === "string" ? parseCoordLabel(part.at) : { ...part.at },
+      size: { ...part.size },
+      pins: Object.fromEntries(
+        Object.entries(part.pins).map(([name, pin]) => [name, { ...pin }]),
+      ),
+    })),
+  };
 }
 
 export function parseView(args: string[]): View {
@@ -219,7 +264,8 @@ export function renderPlan(plan: Plan, view: View = "top"): string {
 async function main(): Promise<void> {
   const view = parseView(process.argv.slice(2));
   const planText = await readFile("plan.json", "utf8");
-  const plan = JSON.parse(planText) as Plan;
+  const rawPlan = JSON.parse(planText) as RawPlan;
+  const plan = normalizePlan(rawPlan);
   const transformedPlan = transformPlan(plan, view);
   const svg = renderPlan(transformedPlan, view);
   await writeFile("output.svg", svg, "utf8");
